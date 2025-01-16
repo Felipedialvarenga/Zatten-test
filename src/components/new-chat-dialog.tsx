@@ -11,6 +11,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
+import { useRouter } from "next/navigation";
 
 const createChat = async (title: string) => {
   const response = await fetch("/api/chats", {
@@ -21,18 +22,21 @@ const createChat = async (title: string) => {
   return response;
 };
 
-export function NewChatDialog() {
+interface NewChatDialogProps {
+  handleNewChatDialog: () => void;
+}
+
+export function NewChatDialog({ handleNewChatDialog }: NewChatDialogProps) {
   const { toast } = useToast();
   const [title, setTitle] = React.useState("");
+  const router = useRouter();
 
   const handleCreateChat = async (title: string) => {
     const response = await createChat(title);
     if (response.ok) {
-      await response.json();
-      toast({
-        description: "Chat criado com sucesso",
-        duration: 3000,
-      });
+      const data = await response.json();
+      handleNewChatDialog();
+      router.push(`/chat/${data[0].thread_id}`);
     } else {
       toast({
         description: "Erro ao criar chat",
@@ -44,7 +48,10 @@ export function NewChatDialog() {
   };
 
   return (
-    <DialogContent className="sm:max-w-[425px]">
+    <DialogContent
+      className="sm:max-w-[425px]"
+      onInteractOutside={handleNewChatDialog}
+    >
       <DialogHeader>
         <DialogTitle>Criar Chat</DialogTitle>
         <DialogDescription>Informe o título do chat</DialogDescription>
@@ -60,6 +67,9 @@ export function NewChatDialog() {
         </div>
       </div>
       <DialogFooter>
+        <Button variant="secondary" onClick={handleNewChatDialog}>
+          Cancelar
+        </Button>
         <Button onClick={() => handleCreateChat(title)}>Salvar</Button>
       </DialogFooter>
     </DialogContent>

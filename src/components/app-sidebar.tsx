@@ -13,7 +13,6 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { DialogTrigger } from "@radix-ui/react-dialog";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Chat } from "@/types";
@@ -31,7 +30,11 @@ const getChats = async () => {
   return data;
 };
 
-export function AppSidebar() {
+interface AppSidebarProps {
+  handleNewChatDialog: () => void;
+}
+
+export function AppSidebar({ handleNewChatDialog }: AppSidebarProps) {
   const [chats, setChats] = useState<Chat[]>([]);
   const threadId = useParams().id;
 
@@ -63,11 +66,10 @@ export function AppSidebar() {
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel>Chats</SidebarGroupLabel>
-          <DialogTrigger asChild>
-            <SidebarGroupAction title="Novo Chat">
-              <Plus /> <span className="sr-only">Novo Chat</span>
-            </SidebarGroupAction>
-          </DialogTrigger>
+          <SidebarGroupAction title="Novo Chat" onClick={handleNewChatDialog}>
+            <Plus />
+            <span className="sr-only">Novo Chat</span>
+          </SidebarGroupAction>
           <SidebarGroupContent>
             <SidebarMenu>
               {chats.map((chat) => (
