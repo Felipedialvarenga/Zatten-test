@@ -1,36 +1,44 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# zatten-test
 
-## Getting Started
+- Deve ser criado um sistema com autenticação usando o clerk (https://clerk.com/), esse sistema deve permitir login e cadastro com email e senha e com alguma autenticação de terceiro, ex: google.
+- No sistema tábem deve ter um dashboard com a listagem de chats já existentes, esses chats devem ser do usuário autenticado.
+- Os chats devem persistir no banco de dados supabase
+- Deve ser possível criar chats novos
+- Os chats devem ser chats com a IA da open AI usando assistentes (https://platform.openai.com/docs/assistants/overview)
+- Deve ser possível criar um chat e conversar com o assistente, ou selecionar um chat já criado anteriormente e continuar a conversa
+- Basicamente a aplicação é como um chatGPT
+- Você pode criar o layout da sua preferência
+- A aplicação deve expor um endpoint (api) para criar um chat novo, passando id ou email do usuário (para fazer o vínculo), e um título para ser mostrado na listagem. Ao criar um novo chat através da request (voce pode usar o insomnia ou postman para testar isso), deve ser criado a thread e salvar no banco, esse chat deve ser mostrado ao vivo na tela de listagem de chats, consulte a documentação do supabase realtime (https://supabase.com/docs/guides/realtime)
 
-First, run the development server:
+Tecnologias obrigatórias: Next, shadcn ui, supabase
+Permitido e incentivado o uso de ferramentas de IA para a criacão do sistema. ex: cursor, v0, lovable, bolt.new etc.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Opcional:
+Seria interessante ter um script de migração de usuário. por exemplo, usar o array de usuário abaixo para inserir todos os usuários no clerk e pedir a criação de senha ou recuperação, ou algo do tipo, mas mantendo o id do usuário.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+[
+  {
+    "id": "123456789",
+    "name": "Fulano",
+    "email": "fulano@zatten.com",
+    "password": "kd98e1289jdbaahjdgajsdajd90281903shdajkasdhjagsdhajsdgashjd",
+  },
+  {
+    "id": "985678253",
+    "name": "Siclano",
+    "email": "siclano@zatten.com",
+    "password": "kd98e1289jdbaahjdgajsdajd90281903shdajkasdhjagsdhajsdgashjd",
+  },
+  {
+    "id": "888765198",
+    "name": "Joaquim",
+    "email": "joaquim@zatten.com",
+    "password": "kd98e1289jdbaahjdgajsdajd90281903shdajkasdhjagsdhajsdgashjd",
+  },
+  {
+    "id": "907243748",
+    "name": "aquele cara",
+    "email": "aquele_cara@zatten.com",
+    "password": "kd98e1289jdbaahjdgajsdajd90281903shdajkasdhjagsdhajsdgashjd",
+  },
+]
