@@ -1,19 +1,19 @@
 "use client";
 import ChatMessages from "./chat-messages";
 import ChatInput from "./chat-input";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { Message } from "@/types";
 import ChatLoading from "./chat-loading";
 
 const getChatMessages = async (threadId: string) => {
-  const response = await fetch(`/api/messages/${threadId}`);
+  const response = await fetch(`/api/messages?threadId=${threadId}`);
   const messages = await response.json();
   return messages;
 };
 
 const sendMessage = async (threadId: string, messageText: string) => {
-  const response = await fetch(`/api/messages/${threadId}`, {
+  const response = await fetch(`/api/messages?threadId=${threadId}`, {
     method: "POST",
     body: JSON.stringify({ messageText }),
   });
@@ -35,12 +35,18 @@ export default function ChatPage() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [loaded, setLoaded] = useState(false);
   const [runInProgress, setRunInProgress] = useState(false);
+  const router = useRouter();
 
   const loadMessages = useCallback(async () => {
     const chatMessages = await getChatMessages(threadId as string);
+    console.log(chatMessages);
+    if (chatMessages?.error == "Chat inexistente") {
+      router.push("/");
+      return;
+    }
     setMessages(chatMessages);
     setLoaded(true);
-  }, [threadId]);
+  }, [threadId, router]);
 
   useEffect(() => {
     if (threadId) {
