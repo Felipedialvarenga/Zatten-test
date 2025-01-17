@@ -5,7 +5,6 @@ import { useParams, useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { Message } from "@/types";
 import ChatLoading from "./chat-loading";
-import { useUser } from "@clerk/nextjs";
 
 const getChatMessages = async (threadId: string) => {
   const response = await fetch(`/api/messages?threadId=${threadId}`);
@@ -36,11 +35,6 @@ export default function ChatPage() {
   const [loaded, setLoaded] = useState(false);
   const [runInProgress, setRunInProgress] = useState(false);
   const router = useRouter();
-  const { isSignedIn } = useUser();
-
-  if (!isSignedIn) {
-    router.push("/");
-  }
 
   const loadMessages = useCallback(async () => {
     const response = await getChatMessages(threadId as string);
@@ -58,6 +52,7 @@ export default function ChatPage() {
     const chatMessages = await response.json();
     setMessages(chatMessages);
     setLoaded(true);
+    setRunInProgress(false);
   }, [threadId, router]);
 
   useEffect(() => {
@@ -72,7 +67,6 @@ export default function ChatPage() {
     setRunInProgress(true);
     await runAssistant(threadId as string);
     loadMessages();
-    setRunInProgress(false);
   };
 
   const noMessages = messages.length === 0;
