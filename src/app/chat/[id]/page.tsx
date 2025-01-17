@@ -6,6 +6,7 @@ import { useCallback, useEffect, useState } from "react";
 import { Message } from "@/types";
 import ChatLoading from "./chat-loading";
 import { useToast } from "@/hooks/use-toast";
+import { useUser } from "@clerk/nextjs";
 
 const getChatMessages = async (threadId: string) => {
   const response = await fetch(`/api/messages?threadId=${threadId}`);
@@ -38,6 +39,11 @@ export default function ChatPage() {
   const [runInProgress, setRunInProgress] = useState(false);
   const router = useRouter();
   const { toast } = useToast();
+  const { isSignedIn } = useUser();
+
+  if (!isSignedIn) {
+    router.push("/");
+  }
 
   const loadMessages = useCallback(async () => {
     const chatMessages = await getChatMessages(threadId as string);
