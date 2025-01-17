@@ -17,11 +17,7 @@ export default function RootLayout({
   const [openNewChatDialog, setOpenNewChatDialog] = useState(false);
   const handleNewChatDialog = () => setOpenNewChatDialog(!openNewChatDialog);
   return (
-    <ClerkProvider
-      afterSignOutUrl={"/"}
-      signInUrl="/sign-in"
-      signUpUrl="/sign-up"
-    >
+    <ClerkProvider afterSignOutUrl={"/"}>
       <html>
         <body>
           <Dialog open={openNewChatDialog}>

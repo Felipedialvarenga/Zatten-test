@@ -1,4 +1,9 @@
-import { SignedIn, UserButton } from "@clerk/nextjs";
+import {
+  RedirectToSignIn,
+  SignedIn,
+  SignedOut,
+  UserButton,
+} from "@clerk/nextjs";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import Link from "next/link";
 
@@ -15,8 +20,11 @@ export function Header() {
       </div>
       <SignedIn>
         {/* Mount the UserButton component */}
-        <UserButton afterSignOutUrl="/" />
+        <UserButton />
       </SignedIn>
+      <SignedOut>
+        <RedirectToSignIn />
+      </SignedOut>
     </header>
   );
 }
