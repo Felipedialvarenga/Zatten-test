@@ -9,8 +9,7 @@ import { useUser } from "@clerk/nextjs";
 
 const getChatMessages = async (threadId: string) => {
   const response = await fetch(`/api/messages?threadId=${threadId}`);
-  const messages = await response.json();
-  return messages;
+  return response;
 };
 
 const sendMessage = async (threadId: string, messageText: string) => {
@@ -44,15 +43,19 @@ export default function ChatPage() {
   }
 
   const loadMessages = useCallback(async () => {
-    const chatMessages = await getChatMessages(threadId as string);
-    if (chatMessages?.error == "Chat inexistente") {
-      router.push("/");
-      return;
+    const response = await getChatMessages(threadId as string);
+    if (!response.ok) {
+      const chatMessages = await response.json();
+      if (chatMessages?.error == "Chat inexistente") {
+        router.push("/");
+        return;
+      }
+      if (chatMessages?.error) {
+        router.refresh();
+        return;
+      }
     }
-    if (chatMessages?.error) {
-      router.refresh();
-      return;
-    }
+    const chatMessages = await response.json();
     setMessages(chatMessages);
     setLoaded(true);
   }, [threadId, router]);
