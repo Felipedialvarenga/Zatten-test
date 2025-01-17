@@ -15,7 +15,7 @@ export function Header() {
       </div>
       <SignedIn>
         {/* Mount the UserButton component */}
-        <UserButton />
+        <UserButton afterSignOutUrl="/" />
       </SignedIn>
     </header>
   );
