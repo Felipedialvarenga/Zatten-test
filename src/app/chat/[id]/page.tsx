@@ -5,7 +5,6 @@ import { useParams, useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { Message } from "@/types";
 import ChatLoading from "./chat-loading";
-import { useToast } from "@/hooks/use-toast";
 import { useUser } from "@clerk/nextjs";
 
 const getChatMessages = async (threadId: string) => {
@@ -38,7 +37,6 @@ export default function ChatPage() {
   const [loaded, setLoaded] = useState(false);
   const [runInProgress, setRunInProgress] = useState(false);
   const router = useRouter();
-  const { toast } = useToast();
   const { isSignedIn } = useUser();
 
   if (!isSignedIn) {
@@ -49,6 +47,10 @@ export default function ChatPage() {
     const chatMessages = await getChatMessages(threadId as string);
     if (chatMessages?.error == "Chat inexistente") {
       router.push("/");
+      return;
+    }
+    if (chatMessages?.error) {
+      router.refresh();
       return;
     }
     setMessages(chatMessages);
@@ -65,14 +67,7 @@ export default function ChatPage() {
     const newMessage = await sendMessage(threadId as string, message);
     setMessages((prevMessages) => [newMessage, ...prevMessages]);
     setRunInProgress(true);
-    const response = await runAssistant(threadId as string);
-    if (!response.ok) {
-      toast({
-        description: "Erro ao processar resposta",
-        variant: "destructive",
-        duration: 3000,
-      });
-    }
+    await runAssistant(threadId as string);
     loadMessages();
     setRunInProgress(false);
   };
